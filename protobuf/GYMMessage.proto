@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+//算法模型决策输出
+message GYMModelOutput{
+    repeated float actions = 1;//决策动作输出数组
+    bytes extra = 2; //预留供扩展使用
+}
+
+//算法模型的环境状态输入
+message GYMModelInput{
+    repeated bytes views = 1;//视野图像数据帧数组
+    repeated float vectors = 2; //必要的矢量数据，按一维数组进行存储
+    repeated float scores = 3; //模型本次决策执行后的分数组，可支持多个
+    bool isFinal = 4; //是否终止
+    string desc = 5; //附加的描述信息
+    bytes extra = 6; //预留供扩展使用
+
+}

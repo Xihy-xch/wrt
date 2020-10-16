@@ -1,0 +1,98 @@
+syntax = "proto3";
+package WRTMessage;
+
+//算法模型决策输出 
+message ModelOutput {
+    int32 type = 1; //1.浮点数数组形式，2.复合类型动作数组形式，3.信息类输出
+    repeated float actions = 2; //决策动作输出数组
+    map<int32, EntityAction> enActions = 3; //复合类型动作数组 
+    CognitiveInfo cogInfo = 4;  //认知信息
+}
+
+//复合类型动作
+message EntityAction {
+    float speed = 1;	//进行速度，单位KM/H
+    float yaw = 2;		//艏向角，度
+    bool fire = 3;		//是否开火
+}
+
+//感知认知到的信息
+message CognitiveInfo {
+    int32 type = 1; //信息类别，1.侦测和识别的结果
+    map<int32, DSERECEntity> cogs = 2; //侦测和识别的结果
+    bytes extra = 3; //预留供扩展使用，使用序列化后的数据
+}
+
+//算法模型的输入
+message ModelInput { 
+    int32 cpId = 1;     //关卡的唯一标识
+    int64 simTime = 2;  //当前仿真时间，单位ms
+    int64 simPeriod = 3;    //当前单步仿真周期
+    repeated bytes views = 4; //视野图像数据帧数组，为GridStateInfo序列化后的结果
+    repeated float vectors = 5; //必要的矢量数据，按一维数组进行存储  
+    repeated float scores = 6; //模型本次决策执行后得分数组，可支持多个  
+    bool isFinal = 7; //是否终止  
+    string desc = 8; //附加的描述信息 
+    repeated bytes arrayViews = 9; //视野图像数据帧，按照一维数组记录的状态空间数据
+}
+
+//按照一维数组记录的状态空间数据
+message ArrayView {
+    repeated int32 view = 1;
+}
+
+//网格地图态势数据
+message GridStateInfo {
+	uint64 id = 1;	//在地图中的编号，左顶点网格自左向右，自上向下顺序累加
+	int32 type = 2;	//类型,1.水,2.陆地,3.山
+	string loc = 3;	//中心经纬度高坐标，比如：120.1231,22.131,0.0
+	repeated DSERECEntity entityList = 5;	//在这个方格中的实体信息
+}
+
+//单个网格信息
+message GridMapStates {
+	string size = 1; //地图矩阵范围大小，比如10*10
+	string topLeftLoc = 2; //左顶点方格中心经纬度信息，比如：120.123,23.8133
+	int32 gridType = 3;	//方格类型 1.正六边形方格
+	float gridInterval = 4;	//两个相邻方格的距离，单位米
+	repeated GridStateInfo stateList = 5;	//方格态势详细信息
+}
+
+//实体参数集
+message DSERECEntity
+{
+    int32 entityID = 1;         //实体的唯一标识
+	string name = 2;            //实体名称
+	string itemClass = 3;       //实体的对应类名称
+	int32 entityType = 4;       //实体所属的种类
+	int32 equipmentType = 5;    //装备类型
+    int32 att = 6;              //所属阵营
+	
+	double LLAPositionLon = 7; //经度
+	double LLAPositionLat = 8; //维度
+	double LLAPositionAlt = 9; //海拔
+	
+	double velocityX = 10;     //速度x，单位KM/H
+	double velocityY = 11;     //速度y，单位KM/H
+	double velocityZ = 12;     //速度z，单位KM/H
+	
+	double pitch = 13;          
+	double yaw = 14;            //艏向角，正北顺时针旋转0-360
+	double roll = 15;
+	
+	double visionAngle = 16;    //视角角度
+	double visionRange = 17;    //视角范围
+	
+	bool isLive = 18;           //是否存活
+	double healthPoint = 19;    //当前血量
+	
+	string entityParam = 20;    //其他参数
+	int32 commanderID = 21;     //指挥官唯一标识
+	string commander = 22;      //指挥官名称
+	map<string, bytes> entityParams = 23;   //额外参数
+    bool isVisible = 24;        //是否可见
+    
+    double shapeX  = 25;        //形状的x，单位m
+    double shapeY = 26;         //形状的y，单位m
+    double shapeZ = 27;         //形状的z，单位m
+}

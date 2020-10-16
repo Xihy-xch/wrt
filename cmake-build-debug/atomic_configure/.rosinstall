@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/xch/vscode-workspace/catkin_ws/src/wrt/cmake-build-debug/devel/setup.sh

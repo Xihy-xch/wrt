@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+//网格地图状态集合
+message GridMapStates{
+    string size = 1; //地图矩阵范围大小，比如10×10
+    string topLeftLoc = 2; //左顶点方格中心经纬度信息
+    int32 gridType = 3; //方格类型 1.正六边型方格
+    int32 gridInterval = 4; //两个相邻的方格的距离，单位米
+    repeated GridStateInfo stateList = 5; //方格态势详细信息
+}
+
+//网格状态
+message GridStateInfo{
+    uint64 id = 1; //在地图中的编号
+    int32 type = 2; //类型1.水，2.陆地,3.山
+    string loc = 3; //中心经纬度坐标
+    int32 alt = 4; //地势海拔
+    repeated DSERECEntity entityList = 5; //在这个方格中的实体信息
+}
+//实体参数集
+message DSERECEntity{
+    int32 entityID = 1; //实体ID
+    string name = 2; //实体名称
+    string itemClass = 3; //实体类型名称
+    int32 entityType = 4; //实体类型
+    int32 equipmentType = 5; //所装备类型
+    int32 att = 6; //所属阵营
+    //经纬高方位
+    double LLAPosition_lon = 7;
+    double LLAPosition_lat = 8;
+    double LLAPosition_alt = 9;
+    //矢量速度
+    double velocity_x = 10;
+    double velocity_y = 11;
+    double velocity_z = 12;
+    double yaw = 14; //首向角度
+    double visionAngle = 16; //视角大小
+    double visionRange = 17; //视角半径
+    bool isLive = 18; //是否存活
+    double healthPoint = 19; //当前血量
+}

@@ -1,0 +1,1 @@
+int32 activeTask #0 侦查， 1 巡逻警戒

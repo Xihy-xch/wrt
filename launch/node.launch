@@ -1,0 +1,12 @@
+<launch>
+    <node name = "simControl_node" pkg = "wrt"
+          type = "simControl.py"/>
+    <node name = "sandBox_node" pkg = "wrt"
+          type = "sandBox.py"/>
+    <node name = "objRecognition_node" pkg = "wrt"
+          type = "objectRecognition.py"/>
+    <node name = "trackPrediction_node" pkg = "wrt"
+          type = "trackPrediction.py"/>
+    <node name = "collaborationSearch_node" pkg = "wrt"
+          type = "collaborationSearch.py"/>
+</launch>
